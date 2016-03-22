@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+<head>
+	<meta charset="UTF-8">
+	<title>cart</title>
+	<link rel="stylesheet" href="/stylesheets/bootstrap.css">
+	<style>
+		div[contentEditable]{
+			cursor: pointer;
+			background-color: red;
+		}
+		.expander {
+    border: 1px solid black;
+    width: 250px;
+}
+
+.expander>.title {
+    background-color: black;
+    color: white;
+    padding: .1em .3em;
+    cursor: pointer;
+}
+
+.expander>.body {
+    padding: .1em .3em;
+}
+.red{color:red;}
+.blue{color:blue;}
+</style>
+</head>
+<body ng-controller="ctrl">
+	<hello>
+		<span>123</span>
+		<span>456</span>
+	</hello>
+   <expander class='expander'>
+      {{text}}
+  </expander>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-4">
+				<input type="text" class="btn btn-primary" ng-model="content" placeholder="click to edit">
+			</div>
+			<div class="col-md-8">
+				<div  contentEditable="true" ng-model="content">some</div>
+				<pre>model = {{content}}</pre>		
+			</div>
+			<input type="text" ng-model="number">
+		</div>
+		<ul ng-init="rows=[1,2,3]">
+			<li ng-repeat="row in rows" ng-class-odd="'red'" ng-class-even="'blue'">
+				<span>{{row}}</span>
+			</li>
+		</ul>
+		<div custom-tags>
+	</div>
+<script src="/javascripts/angular.js"></script>
+<script>
+angular.module('app',[])
+.service('username', ['$injector', function($injector){
+	console.log($injector.instantiate(function(){
+			this.name='huluoyang';
+	}))
+}])
+.directive('customTags',function(){
+	return {
+		restrict:'A',
+		template:'<div>123</div>'	
+	}
+})
+.directive('hello',function(){
+	return {
+		restrict:'E',
+		template:'<div>hi there <span ng-transclude></span></div>',
+		replace:true,
+		transclude:true
+	}
+})
+.directive('expander',function(){
+		return {
+        restrict : 'EA',
+        replace : true,
+        transclude : true,
+        scope : {
+            title : '=expanderTitle'
+        },
+        template : '<div>'
+                 + '<div class="title" ng-click="toggle()">{{title}}</div>'
+                 + '<div class="body" ng-show="showMe" ng-transclude></div>'
+                 + '</div>',
+        link : function(scope, element, attrs) {
+            scope.showMe = false;
+            scope.toggle = function toggle() {
+                scope.showMe = !scope.showMe;
+            }
+        }
+    }
+})
+.directive('contenteditable',function(){
+	return {
+		require : "ngModel",
+		link : function(scope,element,attrs,ctrl){
+			//view -> model
+			element.bind('keyup',function(){
+				scope.$apply(function(){
+					ctrl.$setViewValue(element.text());
+				})
+			});
+			//model -> view
+			ctrl.$render=function(){
+				element.html(ctrl.$viewValue);
+			}
+			//load init value from dom
+			ctrl.$setViewValue(element.html());
+		}
+	}
+})
+.controller('ctrl',function($scope,username){
+	$scope.title = '点击展开';
+  $scope.text = '这里是内部的内容。';
+	$scope.number='123';
+	$scope.$watch('number',function(newValue,oldValue){
+		console.log(oldValue+" "+newValue)
+	})
+})
+</script>
+</body>
+</html>

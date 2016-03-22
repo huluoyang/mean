@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+	<title>model</title>
+	<script src='javascripts/angular.js'></script>
+</head>
+<body>
+	<div ng-controller="SomeCtrl" ng-model="someModel">
+		{{someModel}}
+		<button ng-click="someAction()">Communicate</button>
+	</div>
+
+<script type="text/javascript">
+	var app=angular.module('myApp',[]);
+	app.controller('SomeCtrl', function($scope){
+		//创建模型
+		$scope.someModel='hello computer';
+		//设置$scope自身的操作
+		$scope.someAction=function(){
+			$scope.someModel='hello human'
+		}
+	})
+</script>
+</body>
+</html>

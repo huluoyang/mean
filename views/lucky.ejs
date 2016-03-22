@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+<head>
+	<meta charset="UTF-8">
+	<title>年会抽奖</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<style>
+	body{width: 1000px;margin: 20px auto;font-size: 12px;position: relative;}
+	div{display: inline-block;width: 40px;height: 40px;line-height: 40px;border-radius: 50%;color: white;cursor: pointer;text-align: center;}
+	.red{background: #fd7d7f;}
+	.orange{background: #fdbd43;}
+	.yellow{background: #f4e447;}
+	.green{background: #b5df3a;}
+	.blue{background: #83c9fd;}
+	.purple{background: #e3a7fd;}
+	.gray{background: #888;}
+	.black{background: #222;-webkit-transform: scale(2);}
+	.layout{margin-left: -3px;}
+	#number{position:absolute;top:360px;left: 480px;font-size: 20px;display: none;}
+</style>
+</head>
+<body ng-controller="ctrl">
+	<div ng-repeat="row in rows" id="{{row._id}}" ng-click="count=count+1" ng-init="count=0" class="gray">
+		<div ng-if="count%2==0">
+			{{row.name}}
+		</div>
+		<div ng-if="count%2==1" class="purple">
+			{{row.department}}
+		</div>
+	</div>
+	<div class="blue layout" ng-click="bingo(35,'blue')">四等奖</div>
+	<div class="green layout" ng-click="bingo(20,'green')">三等奖</div>	
+	<div class="yellow layout" ng-click="bingo(9,'yellow')">二等奖</div>	
+	<div class="orange layout" ng-click="bingo(3,'orange')">一等奖</div>	
+	<div class="red layout" ng-click="bingo(1,'red')">特等奖</div>	
+	<div id="number" class="black"></div>
+	<audio id="music" src="audio/effect.mp3"></audio>	
+<script src='javascripts/angular.js'></script>
+<script>
+	var params,flag=true,millisecond=0;
+	var app = angular.module('app',[]);
+	app.controller('ctrl',function($scope,$http){
+		$http.get('/detail').success(function(data){
+			$scope.rows=data;
+			params= $scope.rows.slice(0);
+		})
+		$scope.bingo=function(num,bgcolor){
+			if(!flag){
+				return;
+			}
+			flag=false;
+			document.getElementById('music').play();
+			function getArrayItems(arr, num) {
+			    var return_array = new Array();//取出的数值项,保存在此数组
+			    for (var i = 0; i<num; i++) {
+			        if (params.length>0) {//判断如果数组还有可以取出的元素,以防下标越界
+			            var arrIndex = Math.floor(Math.random()*params.length);//在数组中产生一个随机索引	            
+			            return_array[i] = params[arrIndex];//将此随机索引的对应的数组元素值复制出来				            
+			            params.splice(arrIndex, 1);//然后删掉此索引的数组元素,这时候temp_array变为新的数组
+			        } else {				            
+			            break;//数组中数据项取完后,退出循环,比如数组本来只有10项,但要求取出20项.
+			        }
+			    }
+			    return return_array;
+			}
+			function randomsort(a, b) {
+				return Math.random()>.5 ? -1 : 1;//用Math.random()函数生成0~1之间的随机数与0.5比较，返回-1或1
+			}
+			setTimeout(function(){
+				var timer = setInterval(function(){
+					millisecond+=2000;
+					if(millisecond==2000){
+						document.getElementById('number').style.display='block';
+						document.getElementById('number').innerHTML='5';
+					}
+					if(millisecond==4000){
+						document.getElementById('number').innerHTML='4';
+					}
+					if(millisecond==6000){
+						document.getElementById('number').innerHTML='3';
+					}
+					if(millisecond==8000){
+						document.getElementById('number').innerHTML='2';
+					}
+					if(millisecond==10000){
+						document.getElementById('number').innerHTML='1';
+						millisecond=0;
+						clearInterval(timer);
+						setTimeout(function(){
+							document.getElementById('number').style.display='none';
+							var result = getArrayItems(params,num);
+							for(var i in result){
+								var id = result[i]['_id'];
+								document.getElementById(id).setAttribute('class',bgcolor);
+								flag=true;
+							}							
+						},1200)						
+					}
+					$scope.$apply(function(){
+						$scope.rows.sort(randomsort);
+					});
+				},1200)
+			},2000)
+		}
+	})
+</script>
+</body>
+</html>

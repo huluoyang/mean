@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Two Way Data-Binding</title>
+</head>
+<body ng-app>
+  <div ng-controller="firstController">
+      <p>单价： <input type="number" min=0 ng-model="price" ng-init="price = 299"></p>
+      <p>数量： <input type="number" min=0 ng-model="quantity" ng-init="quantity = 100"></p>
+      <p>总价： {{ quantity * price | number}}</p>
+      <p><input type="text" ng-model="name" value=""></p>
+      <p><input type="text" ng-model="age" value=""></p>
+      <p>{{name}}</p>
+      <p>{{age}}</p>
+      <select name="" id="">
+      	<option value="" ng-repeat="row in rows">{{row.name}}</option>
+      </select>
+  </div>
+  <div ng-controller="secondController">
+    <select ng-model="airport" ng-options="airport.name for airport in airports">
+      <option value="" >choose airport</option>
+    </select>
+    <select ng-model="detail" ng-options="detail.name for detail in airport.details">
+      <option value="">choose detail</option>
+    </select>
+    <input type="text" value="{{airport.id}}">
+  </div>
+  <div ng-controller="thirdController">
+    <select ng-model="province" ng-options="province.name for province in provinces">
+      <option value="" >choose province</option>
+    </select>
+    <select ng-model="city" ng-options="city.name for city in province.citys">
+      <option value="">choose city</option>
+    </select>
+    <select ng-model="county" ng-options="county.name for county in city.countys">
+      <option value="">choose county</option>
+    </select>
+  </div>
+<script src='javascripts/angular.js'></script>
+<script>
+function firstController($scope){
+	$scope.name="huluoyang";
+	$scope.age = 28;
+	$scope.rows=[{id:3,name:'huxiaodong'},{id:2,name:'guoxiaodong'}]
+}
+function secondController($scope){
+  $scope.airports=[
+    {name:"首都国际机场",id:"1",details:[{name:"T1航站楼A"},{name:"T1航站楼B"},{name:"T1航站楼C"}]},
+    {name:"广州天河机场",id:"2",details:[{name:"T2航站楼A"},{name:"T2航站楼B"},{name:"T2航站楼C"}]},
+    {name:"武汉国际机场",id:"3",details:[{name:"T3航站楼A"},{name:"T3航站楼B"},{name:"T3航站楼C"}]}
+  ]
+}
+function secondController($scope){
+  $scope.provinces=[
+    {name:"湖北省",
+      citys:[
+        {name:"武汉市",
+          countys:[
+            {name:"武昌"},
+            {name:"汉口"}
+          ]
+        },
+        {name:"咸宁市",
+          countys:[
+            {name:"咸安"},
+            {name:"温泉"}
+          ]
+        }
+      ]
+    },
+    {name:"湖南省",
+      citys:[
+        {name:"长沙市",
+          countys:[
+            {name:"岳麓区"},
+            {name:"芙蓉区"}
+          ]
+        },
+        {name:"衡阳市",
+          countys:[
+            {name:"衡山县"},
+            {name:"衡山县"}
+          ]
+        }
+      ]
+    },
+    {name:"江西省",
+      citys:[
+        {name:"九江市",
+          countys:[
+            {name:"九江县"},
+            {name:"庐山区"}
+          ]
+        },
+        {name:"南昌市",
+          countys:[
+            {name:"南昌县"},
+            {name:"莲塘镇"}
+          ]
+        }
+      ]
+    }
+  ]
+}
+
+</script>
+</body>
+</html>

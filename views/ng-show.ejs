@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html ng-app>
+<head>
+	<meta charset="UTF-8">
+	<title>ng-show</title>
+</head>
+<body ng-controller="main">
+		<div ng-if="number == 2">1</div>
+		<div ng-if="number == 3">2</div>	
+<script src='javascripts/angular.js'></script>
+<script>
+	function main($scope,$http,$timeout){
+		$scope.number=2;
+		$timeout(function(){
+			 $scope.number=3;
+			},1000)
+	}
+</script>
+</body>
+</html>

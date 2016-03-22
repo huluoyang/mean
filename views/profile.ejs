@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	<title><%= title %></title>
+	<style type="text/css">
+		body{margin:15px;text-align: center;line-height: 1.5;}
+		table{width:100%;margin:0 auto;background: #dcdcdc;}
+		th{background-color: #ec4949;color: white;font-weight: normal;}
+		td{background-color: #fff;}
+	</style>
+</head>
+<body ng-controller="ctrl">
+	<p>Welcome to <%= title %></p>
+	<table cellspacing="1" cellpadding="0">
+			<tr>
+				<th>部门</th>
+				<th>编号</th>
+				<th>姓名</th>
+				<th>日期</th>
+				<th>上班</th>
+				<th>状态</th>
+				<th>下班</th>
+				<th>状态</th>
+				<th>迟到(分钟)</th>
+				<th>早退(分钟)</th>
+				<th>加班(小时)</th>
+				<th>旷工(天)</th>
+			</tr>
+			<tr ng-repeat="row in rows">
+				<td>{{row.department}}</td>
+				<td>{{row.id}}</td>
+				<td>{{row.username}}</td>
+				<td>{{row.date}}</td>
+				<td>{{row.startTime}}</td>
+				<td>{{row.startDetail}}</td>
+				<td>{{row.stopTime}}</td>
+				<td>{{row.stopDetail}}</td>
+				<td>{{row.lateMinute}}</td>
+				<td>{{row.earlyMinute}}</td>
+				<td>{{row.overtimeHour}}</td>
+				<td>{{row.absentDay}}</td>
+			</tr>
+	</table>
+<script src='javascripts/angular.js'></script>
+<script>
+	var app = angular.module('app',[]);
+	app.controller('ctrl',function($scope,$http){
+	    $http.post('/huxiaodong',{username:"胡晓冬"}).success(function(data){
+	      $scope.rows=data;
+	    })
+	})
+</script>
+</body>
+</html>

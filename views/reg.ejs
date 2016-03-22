@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+<head>
+  <title><%= title %></title>
+  <link rel='stylesheet' href='stylesheets/style.css' />
+</head>
+<body ng-controller="ctrl">
+  <h2>Welcome to <%= title %></h2>
+  <form>
+	  <p>
+	    <span>username:</span>
+	    <br>
+	    <input id="username" ng-model="username" name="username" type="text" autofocus>
+	  </p>
+	  <p>
+	    <span>password:</span>
+	    <br>
+	    <input id="password" ng-model="password" name="password" type="password">
+	  </p>
+	  <p><button ng-click="reg()">注册</button></p>  	
+  </form>
+
+  <script src='javascripts/angular.js'></script>
+  <script>
+  	var app = angular.module('app',[]);
+  	app.controller('ctrl',function($scope,$http){
+  		$scope.reg=function(){
+  			$http.post('/reg',{username:$scope.username,password:$scope.password}).success(function(data){
+  				if(data.status==200){
+  					location.pathname="/ucenter";
+  				}else{
+  					alert('用户名已存在，请重新注册！');
+  					$scope.username=null;
+  					username.focus();
+  				}
+  			})
+  		}
+  	})
+  </script>
+</body>
+</html>

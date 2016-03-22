@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+<head>
+  <title><%= title %></title>
+  <link rel='stylesheet' href='stylesheets/style.css' />
+</head>
+<body ng-controller="ctrl">
+  <h2>Welcome to <%= title %></h2>
+  <p>
+    <span>name:</span>
+    <br>
+    <input id="username" ng-model="username" name="username" type="text">
+  </p>
+  <p>
+    <span>password:</span>
+    <br>
+    <input id="password" ng-model="password" name="password" type="password">
+  </p>
+  <p><button ng-click="login()">submit</button></p>
+  <p><button ng-click="update()">update</button></p>
+  <script src='javascripts/angular.js'></script>
+  <script>
+  	var app = angular.module('app',[]);
+  	app.controller('ctrl',function($scope,$http){
+      // user = $scope.user;
+  		$scope.login=function(){
+        console.log($scope.username,$scope.password);
+  			$http.post('/login',{username:$scope.username,password:$scope.password}).success(function(data){
+  				alert(data);
+  			})
+  		}
+      $scope.update=function(){
+        console.log($scope.username,$scope.password);
+        $http.post('/update',{username:$scope.username,password:$scope.password}).success(function(data){
+          alert(data);
+        })
+      }
+  	})
+
+  </script>
+</body>
+</html>
