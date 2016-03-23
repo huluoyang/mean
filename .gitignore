@@ -1,5 +1,4 @@
-# OS
-# ===========
+# 以下目录或文件，将被git忽略
 .DS_Store
 .git
 node_modules
