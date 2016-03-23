@@ -1,6 +1,6 @@
-1.git clone https://github.com/huluoyang/bingo/
+1.git clone https://github.com/huluoyang/mean/
 
-2.cd bingo
+2.cd mean
 
 3.npm install 
 
